@@ -1,8 +1,11 @@
 package sobinda.javadiplomcloud.controller;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sobinda.javadiplomcloud.service.CloudService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -25,9 +28,9 @@ public class CloudController {
     public String deleteFile() {
         return null;
     }
-    //продумать
+    //продумать, какой список
     @GetMapping("/file")
-    public String getFile() {
+    public List<String> getFile() {
         return null;
     }
     //продумать
