@@ -25,17 +25,17 @@ public class CloudController {
     public String deleteFile() {
         return null;
     }
-
+    //продумать
     @GetMapping("/file")
     public String getFile() {
         return null;
     }
-
+    //продумать
     @PutMapping("/file")
     public String putFile() {
         return null;
     }
-
+    //продумать
     @GetMapping("/list")
     public String getAllFile(){
         return null;
