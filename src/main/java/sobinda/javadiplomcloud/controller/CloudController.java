@@ -1,7 +1,6 @@
 package sobinda.javadiplomcloud.controller;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import sobinda.javadiplomcloud.service.CloudService;
 
@@ -20,28 +19,31 @@ public class CloudController {
     //продумать
     @PostMapping("/file")
     public String uploadFile() {
-        return null;
+        return cloudService.uploadFile();
     }
 
     //продумать
     @DeleteMapping("/file")
     public String deleteFile() {
-        return null;
+        return cloudService.deleteFile();
     }
+
     //продумать, какой список
     @GetMapping("/file")
     public List<String> getFile() {
-        return null;
+        return cloudService.getFile();
     }
+
     //продумать
     @PutMapping("/file")
     public String putFile() {
-        return null;
+        return cloudService.putFile();
     }
+
     //продумать
     @GetMapping("/list")
-    public String getAllFile(){
-        return null;
+    public String getAllFile() {
+        return cloudService.getAllFile();
     }
 
 }
