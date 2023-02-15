@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Data
@@ -17,6 +18,7 @@ public class Cloud {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "file_name", length = 20)
+    @NotBlank
+    @Column(name = "file_name", length = 20, nullable = false)
     private String fileName;
 }
