@@ -11,7 +11,7 @@ import sobinda.javadiplomcloud.service.CloudService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+//@RequestMapping("/")
 public class CloudController {
 
     private final CloudService cloudService;

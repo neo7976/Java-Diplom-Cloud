@@ -14,6 +14,7 @@ public class CloudRepositoryImp {
 
     public CloudFile uploadFile(CloudFile cloudFile) {
         //todo написать реализацию
+        cloudRepository.save(cloudFile);
         return cloudFile;
     }
 }
