@@ -2,6 +2,7 @@ package sobinda.javadiplomcloud.controller;
 
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import sobinda.javadiplomcloud.service.CloudService;
 
 import java.util.List;
@@ -18,8 +19,8 @@ public class CloudController {
 
     //продумать
     @PostMapping("/file")
-    public String uploadFile() {
-        return cloudService.uploadFile();
+    public String uploadFile(@RequestParam MultipartFile multipartFile) {
+        return cloudService.uploadFile(multipartFile);
     }
 
     //продумать

@@ -1,11 +1,9 @@
 package sobinda.javadiplomcloud.entity;
 
 import jdk.jfr.Name;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import net.bytebuddy.implementation.bind.annotation.Default;
+import org.springframework.beans.factory.annotation.Value;
 import sobinda.javadiplomcloud.model.Authorities;
 
 import javax.persistence.*;
