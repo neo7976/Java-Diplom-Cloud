@@ -1,8 +1,11 @@
 package sobinda.javadiplomcloud.controller;
 
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sobinda.javadiplomcloud.entity.CloudFile;
 import sobinda.javadiplomcloud.service.CloudService;
 
 import java.util.List;
@@ -19,8 +22,8 @@ public class CloudController {
 
     //продумать
     @PostMapping("/file")
-    public String uploadFile(@RequestParam MultipartFile multipartFile) {
-        return cloudService.uploadFile(multipartFile);
+    public ResponseEntity<CloudFile> uploadFile(@RequestParam MultipartFile multipartFile) {
+        return new ResponseEntity<>(cloudService.uploadFile(multipartFile), HttpStatus.CREATED);
     }
 
     //продумать

@@ -1,6 +1,7 @@
 package sobinda.javadiplomcloud.repository;
 
 import org.springframework.stereotype.Repository;
+import sobinda.javadiplomcloud.entity.CloudFile;
 
 @Repository
 public class CloudRepositoryImp {
@@ -9,5 +10,10 @@ public class CloudRepositoryImp {
 
     public CloudRepositoryImp(CloudRepository cloudRepository) {
         this.cloudRepository = cloudRepository;
+    }
+
+    public CloudFile uploadFile(CloudFile cloudFile) {
+        //todo написать реализацию
+        return cloudFile;
     }
 }

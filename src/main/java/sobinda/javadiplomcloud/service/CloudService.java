@@ -1,5 +1,6 @@
 package sobinda.javadiplomcloud.service;
 
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import sobinda.javadiplomcloud.entity.CloudFile;
@@ -21,15 +22,16 @@ public class CloudService {
         this.cloudManager = cloudManager;
     }
 
+    @SneakyThrows
     @Transactional(rollbackOn = {IOException.class})
-    public String uploadFile(MultipartFile multipartFile) {
+    public CloudFile uploadFile(MultipartFile multipartFile) {
         CloudFile cloudFile = CloudFile.builder()
                 .fileName(multipartFile.getName())
                 .size(multipartFile.getSize())
                 .build();
-
-
-        return null;
+        cloudFile = cloudRepository.uploadFile(cloudFile);
+        cloudManager.upload(multipartFile.getBytes(), cloudFile.getKey().toString());
+        return cloudFile;
     }
 
     public String deleteFile() {
