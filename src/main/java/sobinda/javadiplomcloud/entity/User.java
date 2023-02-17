@@ -35,6 +35,8 @@ public class User {
     private Authorities role;
 
     @ElementCollection
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 15)
     private Set<Authorities> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
