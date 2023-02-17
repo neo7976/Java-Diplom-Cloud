@@ -8,6 +8,8 @@ import sobinda.javadiplomcloud.model.Authorities;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -31,5 +33,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
     private Authorities role;
+
+    @ElementCollection
+    private Set<Authorities> roles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CloudFile> cloudFileList;
 
 }

@@ -36,4 +36,9 @@ public class CloudFile {
     )
     @Column(nullable = false, unique = true, name = "file_key")
     private UUID key;
+
+    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, name = "id_user")
+    private User user;
+
 }
