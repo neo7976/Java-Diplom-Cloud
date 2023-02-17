@@ -31,7 +31,7 @@ public class CloudService {
                 .build();
 
         cloudFile = cloudRepository.uploadFile(cloudFile);
-        cloudManager.upload(multipartFile.getBytes(), cloudFile.getKey().toString());
+        cloudManager.upload(multipartFile.getBytes(), cloudFile.getKey().toString(), cloudFile.getFileName());
         return cloudFile;
     }
 
