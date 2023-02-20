@@ -26,5 +26,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### Мои написания
 ```
 npm start
+
+npm audit fix
 ```
+
 
