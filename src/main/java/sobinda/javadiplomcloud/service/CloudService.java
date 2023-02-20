@@ -10,6 +10,7 @@ import sobinda.javadiplomcloud.util.CloudManager;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -28,7 +29,8 @@ public class CloudService {
                 .build();
 
         cloudFile = cloudRepository.save(cloudFile);
-        cloudManager.upload(multipartFile.getBytes(), cloudFile.getKey().toString(), cloudFile.getFileName());
+//        cloudManager.upload(multipartFile.getBytes(), cloudFile.getKey().toString(), cloudFile.getFileName());
+        cloudManager.upload(multipartFile.getContentType(), cloudFile.getKey().toString(), cloudFile.getFileName());
         return cloudFile;
     }
 
@@ -36,8 +38,10 @@ public class CloudService {
         return null;
     }
 
-    public List<String> getFile() {
-        return null;
+    @Transactional
+    public String getFile(Integer id) {
+        var cloudFile = cloudRepository.findById(id);
+        return cloudFile.map(cloudManager::getFile).orElse(null);
     }
 
     public String putFile() {

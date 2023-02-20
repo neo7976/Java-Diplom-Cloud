@@ -33,9 +33,9 @@ public class CloudController {
     }
 
     //продумать, какой список
-    @GetMapping("/file")
-    public List<String> getFile() {
-        return cloudService.getFile();
+    @GetMapping("/file/{id}")
+    public String getFile(@PathVariable Integer id) {
+        return cloudService.getFile(id);
     }
 
     //продумать
