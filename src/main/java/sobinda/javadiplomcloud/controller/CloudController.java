@@ -39,8 +39,8 @@ public class CloudController {
     }
 
     //продумать
-    @PutMapping("/file")
-    public String putFile() {
+    @PutMapping("/file/{id}")
+    public String putFile(@PathVariable Integer id) {
         return cloudService.putFile();
     }
 
