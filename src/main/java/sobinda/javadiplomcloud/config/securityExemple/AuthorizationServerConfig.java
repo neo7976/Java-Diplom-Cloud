@@ -1,4 +1,4 @@
-package sobinda.javadiplomcloud.config.security;
+package sobinda.javadiplomcloud.config.securityExemple;
 
 
 import com.nimbusds.jose.jwk.JWKSet;

@@ -1,4 +1,4 @@
-package sobinda.javadiplomcloud.config.security;
+package sobinda.javadiplomcloud.config.securityExemple;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
