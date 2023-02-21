@@ -71,7 +71,7 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    public List<User> userGetListMin(Integer idMin) {
-        return userRepository.findAllByIdWhereIdLess(idMin);
+    public List<User> userGetListMoreId(Integer idMin) {
+        return userRepository.findAllByIdWhereIdMore(idMin);
     }
 }

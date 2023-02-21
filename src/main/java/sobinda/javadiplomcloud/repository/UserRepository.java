@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findUserByLogin(String login);
 
-    @Query(value = "select User from User where User.id<:id")
-    List<User> findAllByIdWhereIdLess(@Param("id") Integer id);
+    @Query(value = "select User from User where User.id>:id")
+    List<User> findAllByIdWhereIdMore(@Param("id") Integer id);
 }
