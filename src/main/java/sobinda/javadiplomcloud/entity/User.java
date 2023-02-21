@@ -2,6 +2,7 @@ package sobinda.javadiplomcloud.entity;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+@Table(name = "t_user")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +32,9 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
+    @Transient
+    private String passwordConfirm;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CloudFile> cloudFileList;

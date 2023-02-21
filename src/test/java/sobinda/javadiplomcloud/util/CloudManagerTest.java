@@ -27,8 +27,7 @@ class CloudManagerTest {
         user = User.builder()
                 .login("111@yandex.ru")
                 .password("1111")
-                .role(Role.USER)
-                .roles(Set.of(Role.READ, Role.GUEST))
+                .roles(Set.of(new Role()))
                 .build();
         System.out.println(user);
 
