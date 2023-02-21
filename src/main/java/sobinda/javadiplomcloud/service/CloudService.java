@@ -2,6 +2,7 @@ package sobinda.javadiplomcloud.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import sobinda.javadiplomcloud.entity.CloudFile;
@@ -10,15 +11,13 @@ import sobinda.javadiplomcloud.util.CloudManager;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class CloudService {
-
-    private final CloudManager cloudManager;
-    private final CloudRepository cloudRepository;
+    @Autowired
+    CloudManager cloudManager;
+    @Autowired
+    CloudRepository cloudRepository;
 
     @SneakyThrows
     @Transactional(rollbackOn = {IOException.class})

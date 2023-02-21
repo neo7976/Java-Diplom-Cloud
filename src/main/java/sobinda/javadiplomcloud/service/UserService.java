@@ -64,6 +64,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> userGetListMoreId(Integer idMin) {
-        return userRepository.findAllByIdWhereIdMore(idMin);
+//        return userRepository.findAllByIdWhereIdMore(idMin);
+        return Collections.emptyList();
     }
 }

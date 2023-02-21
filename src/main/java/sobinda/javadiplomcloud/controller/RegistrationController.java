@@ -1,6 +1,7 @@
 package sobinda.javadiplomcloud.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -13,10 +14,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @RestController
-@RequiredArgsConstructor
 public class RegistrationController {
     Logger logger;
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/registration")
     public String registration(Model model) {

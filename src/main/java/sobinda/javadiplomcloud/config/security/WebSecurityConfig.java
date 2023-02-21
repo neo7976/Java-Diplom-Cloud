@@ -14,11 +14,11 @@ import sobinda.javadiplomcloud.service.UserService;
 import javax.sql.DataSource;
 
 @Configuration
-@RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
+    @Autowired
+    UserService userService;
 
     @Bean
     public BCryptPasswordEncoder encoder() {
