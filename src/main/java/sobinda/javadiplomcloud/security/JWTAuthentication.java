@@ -33,21 +33,21 @@ public class JWTAuthentication implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return null;
+        return username;
     }
 
     @Override
     public boolean isAuthenticated() {
-        return false;
+        return authenticated;
     }
 
     @Override
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-
+        this.authenticated = isAuthenticated;
     }
 
     @Override
     public String getName() {
-        return null;
+        return firstName;
     }
 }
