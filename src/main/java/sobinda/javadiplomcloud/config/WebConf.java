@@ -12,7 +12,7 @@ public class WebConf implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowCredentials(true)
                 //устанавливаем разрешения с нашего хоста
-                .allowedOrigins("http://localhost:8080")
+                .allowedOrigins("http://localhost:8080/**")
                 .allowedMethods("*");
     }
 }
