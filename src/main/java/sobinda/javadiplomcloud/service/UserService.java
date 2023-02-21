@@ -19,20 +19,12 @@ import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
-//    @PersistenceContext
-//    private EntityManager entityManager;
     @Autowired
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
-
-    //todo исправить или удалить
-    public String login(Login login) {
-        var result = userRepository.findUserByLogin(login.getLogin());
-        return result.get().toString();
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
