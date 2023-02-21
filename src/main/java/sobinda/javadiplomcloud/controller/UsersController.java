@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import sobinda.javadiplomcloud.model.Login;
-import sobinda.javadiplomcloud.service.UsersService;
+import sobinda.javadiplomcloud.service.UserService;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,13 +14,13 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 public class UsersController {
     Logger logger;
-    UsersService usersService;
+    UserService userService;
 
 //    @PostMapping("/login")
     @PostMapping("/login")
     public String login(@Validated @RequestBody Login login) {
         logger.log(Level.INFO, "Пользователь пробует авторизоваться");
-        usersService.login(login);
+        userService.login(login);
         return null;
     }
 }
