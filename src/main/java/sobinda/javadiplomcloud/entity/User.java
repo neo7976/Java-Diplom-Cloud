@@ -1,10 +1,7 @@
 package sobinda.javadiplomcloud.entity;
 
-import jdk.jfr.Name;
 import lombok.*;
-import net.bytebuddy.implementation.bind.annotation.Default;
-import org.springframework.beans.factory.annotation.Value;
-import sobinda.javadiplomcloud.model.Authorities;
+import sobinda.javadiplomcloud.model.Role;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -30,14 +27,10 @@ public class User {
     @Column(length = 15, nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 15)
-    private Authorities role;
-
     @ElementCollection
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
-    private Set<Authorities> roles;
+    private Set<Role> roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CloudFile> cloudFileList;

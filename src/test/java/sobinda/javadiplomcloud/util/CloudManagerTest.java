@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sobinda.javadiplomcloud.entity.CloudFile;
 import sobinda.javadiplomcloud.entity.User;
-import sobinda.javadiplomcloud.model.Authorities;
+import sobinda.javadiplomcloud.model.Role;
 
 import java.io.File;
 import java.time.Instant;
@@ -27,8 +27,7 @@ class CloudManagerTest {
         user = User.builder()
                 .login("111@yandex.ru")
                 .password("1111")
-                .role(Authorities.USER)
-                .roles(Set.of(Authorities.READ, Authorities.GUEST))
+                .roles(Set.of(Role.READ, Role.GUEST))
                 .build();
         System.out.println(user);
 
