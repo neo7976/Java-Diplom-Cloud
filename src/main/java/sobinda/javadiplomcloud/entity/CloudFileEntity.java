@@ -14,7 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @ToString
-public class CloudFile {
+public class CloudFileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -39,6 +39,6 @@ public class CloudFile {
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "id_user")
-    private User user;
+    private UserEntity userEntity;
 
 }

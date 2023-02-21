@@ -1,17 +1,10 @@
 package sobinda.javadiplomcloud.util;
 
-import ch.qos.logback.core.util.FileUtil;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.stereotype.Component;
-import sobinda.javadiplomcloud.entity.CloudFile;
+import sobinda.javadiplomcloud.entity.CloudFileEntity;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
 
 @NoArgsConstructor
 //добавил для сервиса
@@ -46,12 +39,12 @@ public class CloudManager {
         }
     }
 
-    public String getFile(CloudFile cloudFile) {
+    public String getFile(CloudFileEntity cloudFileEntity) {
         StringBuilder sb = new StringBuilder();
         try {
             BufferedReader it = new BufferedReader(new FileReader(DIRECTORY_PATH +
-                    "/" + cloudFile.getKey().toString() +
-                    "/" + cloudFile.getFileName()));
+                    "/" + cloudFileEntity.getKey().toString() +
+                    "/" + cloudFileEntity.getFileName()));
             String line;
             while ((line = it.readLine()) != null) {
                 sb.append(line);
