@@ -23,7 +23,7 @@ public class CloudController {
 
     private final CloudService cloudService;
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/file")
     public ResponseEntity<Void> uploadFile(@NotNull @RequestParam("file") MultipartFile multipartFile,
                                            @RequestParam("filename") String fileName) {
@@ -51,7 +51,7 @@ public class CloudController {
     }
 
     //продумать
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/list")
     public String getAllFile() {
 //        return cloudService.getAllFile();
