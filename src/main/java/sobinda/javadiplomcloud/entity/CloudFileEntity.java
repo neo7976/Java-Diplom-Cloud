@@ -14,6 +14,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @ToString
+@Table(name = "Cloud_File")
 public class CloudFileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

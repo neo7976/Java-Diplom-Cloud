@@ -17,6 +17,7 @@ public class UserController {
 
     @PostMapping("login")
     public String login(@RequestBody UserDTO userDTO) {
+        userService.login(userDTO);
         return "Привет";
     }
 }
