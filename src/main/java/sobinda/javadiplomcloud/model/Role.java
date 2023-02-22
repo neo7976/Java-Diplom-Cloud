@@ -5,11 +5,10 @@ import org.springframework.security.core.GrantedAuthority;
 
 @RequiredArgsConstructor
 public enum Role implements GrantedAuthority {
-    ADMIN("ROLE_ADMIN"),
-    READ("ROLE_READ"),
-    WRITE("ROLE_WRITE"),
-    USER("ROLE_WRITE"),
-    GUEST("ROLE_GUEST");
+    ROLE_ADMIN("ROLE_ADMIN"),
+    ROLE_READ("ROLE_READ"),
+    ROLE_WRITE("ROLE_WRITE"),
+    ROLE_GUEST("ROLE_GUEST");
 
     private final String nameRole;
 

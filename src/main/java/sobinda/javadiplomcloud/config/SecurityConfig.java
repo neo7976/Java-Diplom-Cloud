@@ -16,7 +16,7 @@ import sobinda.javadiplomcloud.security.JWTFilter;
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
 
     //todo Сделать свой
@@ -25,7 +25,7 @@ public class SecurityConfig {
     @SneakyThrows
     @Bean
     protected SecurityFilterChain filterChain(HttpSecurity http) {
-       return http.httpBasic().disable()
+        return http.httpBasic().disable()
                 .formLogin().disable()
                 .csrf().disable()
                 .cors().and()
@@ -34,6 +34,8 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests().antMatchers(HttpMethod.POST, "/login", "/user/register").permitAll()
                 .and()
+//                .authorizeRequests().antMatchers(HttpMethod.POST, "/list").permitAll()
+//                .and()
                 .authorizeRequests().anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

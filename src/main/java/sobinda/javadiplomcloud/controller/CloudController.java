@@ -1,27 +1,35 @@
 package sobinda.javadiplomcloud.controller;
 
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sobinda.javadiplomcloud.entity.CloudFileEntity;
 import sobinda.javadiplomcloud.service.CloudService;
 
+import javax.validation.constraints.NotNull;
+
 @RestController
+@Slf4j
+@RequiredArgsConstructor
+//@CrossOrigin("http//localhost:8000")
 //@RequestMapping("/")
 public class CloudController {
 
     private final CloudService cloudService;
 
-    public CloudController(CloudService cloudService) {
-        this.cloudService = cloudService;
-    }
-
-    //продумать
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/file")
-    public ResponseEntity<CloudFileEntity> uploadFile(@RequestParam MultipartFile multipartFile) {
-        return new ResponseEntity<>(cloudService.uploadFile(multipartFile), HttpStatus.CREATED);
+    public ResponseEntity<Void> uploadFile(@NotNull @RequestParam("file") MultipartFile multipartFile,
+                                           @RequestParam("filename") String fileName) {
+        log.info("Получили файл на загрузку: {}", fileName);
+//        cloudService.uploadFile(multipartFile);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     //продумать
@@ -45,7 +53,8 @@ public class CloudController {
     //продумать
     @GetMapping("/list")
     public String getAllFile() {
-        return cloudService.getAllFile();
+//        return cloudService.getAllFile();
+        return "Хай";
     }
 
 }
