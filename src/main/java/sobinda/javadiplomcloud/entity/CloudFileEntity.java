@@ -38,7 +38,7 @@ public class CloudFileEntity {
     private UUID key;
 
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "id_user")
+    @JoinColumn(nullable = false, name = "user_id")
     private UserEntity userEntity;
 
 }

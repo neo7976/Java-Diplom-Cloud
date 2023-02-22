@@ -11,8 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import javax.servlet.Filter;
+import sobinda.javadiplomcloud.security.JWTFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -21,11 +20,11 @@ import javax.servlet.Filter;
 public class SecurityConfig {
 
     //todo Сделать свой
-    private final Filter jwtFilter;
+    private final JWTFilter jwtFilter;
 
     @SneakyThrows
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) {
+    protected SecurityFilterChain filterChain(HttpSecurity http) {
        return http.httpBasic().disable()
                 .formLogin().disable()
                 .csrf().disable()
