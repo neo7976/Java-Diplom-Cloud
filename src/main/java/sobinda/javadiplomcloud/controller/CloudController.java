@@ -51,6 +51,7 @@ public class CloudController {
     }
 
     //продумать
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/list")
     public String getAllFile() {
 //        return cloudService.getAllFile();
