@@ -26,4 +26,10 @@ public class WebConf implements WebMvcConfigurer {
                 .allowedMethods("*")
                 .allowedHeaders("*");
     }
-}
+
+//        @Override
+//        public void addCorsMappings(CorsRegistry registry) {
+//            registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE");
+//        }
+    }
+
