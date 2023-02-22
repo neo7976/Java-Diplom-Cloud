@@ -54,7 +54,7 @@ public class JWTToken {
                 .signWith(secret)
                 .claim("roles", userEntity.getRoles())
                 .compact();
-        log.info("Auth-token {} добавлен в список активных токеннов", token);
+        log.info("Auth-token: {} добавлен в список активных токенов", token);
         listTokens.add(token);
         return token;
     }

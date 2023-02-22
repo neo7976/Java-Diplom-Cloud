@@ -24,7 +24,7 @@ public class UserEntity {
     private String login;
 
     @NotBlank
-    @Column(length = 15, nullable = false)
+    @Column(nullable = false)
     private String password;
 
     @ElementCollection
