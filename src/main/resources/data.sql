@@ -16,3 +16,6 @@ insert into user_entity_roles(user_entity_id, roles)
 values (2, 'ROLE_WRITE');
 insert into user_entity_roles(user_entity_id, roles)
 values (3, 'ROLE_READE');
+
+
+select * from cloud_file c where c.user_id = :userId

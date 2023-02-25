@@ -35,7 +35,7 @@ public class CloudFileEntity {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Column(nullable = false, unique = true, name = "file_key")
+    @Column(unique = true, name = "file_key")
     private UUID key;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import sobinda.javadiplomcloud.dto.CloudFileDto;
 import sobinda.javadiplomcloud.entity.CloudFileEntity;
 import sobinda.javadiplomcloud.entity.UserEntity;
 import sobinda.javadiplomcloud.repository.CloudRepository;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,10 +45,14 @@ public class CloudService {
                 .build();
 
         log.info(cloudFileEntity.toString());
+        var cloudId = cloudRepository.save(cloudFileEntity).getId();
+        if (cloudRepository.findById(cloudId).isPresent()) {
+            log.info("Файл {} записан в БД под id {}", cloudFileEntity, cloudId);
+        }
 
-        cloudRepository.save(cloudFileEntity);
 //        cloudManager.upload(multipartFile.getBytes(), cloudFile.getKey().toString(), cloudFile.getFileName());
         cloudManager.upload(multipartFile.getContentType(), cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
+        log.info("Файл записан на сервер");
 //        return cloudFileEntity;
     }
 
@@ -64,7 +70,18 @@ public class CloudService {
         return null;
     }
 
-    public List<CloudFileEntity> getAllFile() {
-        return cloudRepository.findAll();
+    public List<CloudFileDto> getAllFile() {
+        int userId = jwtToken.getAuthenticatedUser().getId();
+
+//        var cloudFileEntityList = cloudRepository.findAll();
+        var cloudFileEntityList = cloudRepository.findAllByUserId(userId);
+        return cloudFileEntityList.stream()
+                .map(file -> CloudFileDto.builder()
+                        .fileName(file.getFileName())
+                        .key(file.getKey())
+                        .date(file.getDate())
+                        .size(file.getSize())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

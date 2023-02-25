@@ -9,10 +9,12 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sobinda.javadiplomcloud.dto.CloudFileDto;
 import sobinda.javadiplomcloud.entity.CloudFileEntity;
 import sobinda.javadiplomcloud.service.CloudService;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -53,8 +55,8 @@ public class CloudController {
     //продумать
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/list")
-    public ResponseEntity<CloudFileEntity> getAllFile() {
-        cloudService.getAllFile();
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+    public ResponseEntity<List<CloudFileDto>> getAllFile() {
+        var result = cloudService.getAllFile();
+        return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
     }
 }
