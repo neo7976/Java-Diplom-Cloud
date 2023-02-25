@@ -1,6 +1,7 @@
 package sobinda.javadiplomcloud.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CloudFileDto {
 
+    @JsonProperty("filename")
     private String fileName;
     private Long size;
     private Instant date;
