@@ -38,8 +38,8 @@ public class CloudFileEntity {
     @Column(nullable = false, unique = true, name = "file_key")
     private UUID key;
 
-    @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false, name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity userEntity;
 
 }

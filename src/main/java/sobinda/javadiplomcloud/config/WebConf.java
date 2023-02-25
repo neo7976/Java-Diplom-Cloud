@@ -20,7 +20,7 @@ public class WebConf implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 //устанавливаем разрешения с нашего хоста
-                .allowedOrigins("http://localhost:8080", "http://localhost:8085")
+                .allowedOrigins("http://localhost:8080", "http://localhost:8081")
                 .allowCredentials(true)
                 .allowedMethods("*")
                 .allowedHeaders("*");

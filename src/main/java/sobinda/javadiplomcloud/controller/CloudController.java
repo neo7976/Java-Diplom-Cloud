@@ -23,12 +23,12 @@ public class CloudController {
 
     private final CloudService cloudService;
 
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/file")
     public ResponseEntity<Void> uploadFile(@NotNull @RequestParam("file") MultipartFile multipartFile,
                                            @RequestParam("filename") String fileName) {
         log.info("Получили файл на загрузку: {}", fileName);
-//        cloudService.uploadFile(multipartFile);
+        cloudService.uploadFile(multipartFile, fileName);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -53,9 +53,8 @@ public class CloudController {
     //продумать
 //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/list")
-    public String getAllFile() {
-//        return cloudService.getAllFile();
-        return "Хай";
+    public ResponseEntity<CloudFileEntity> getAllFile() {
+        cloudService.getAllFile();
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
-
 }
