@@ -1,5 +1,6 @@
 package sobinda.javadiplomcloud.util;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +9,7 @@ import sobinda.javadiplomcloud.entity.CloudFileEntity;
 import sobinda.javadiplomcloud.entity.UserEntity;
 import sobinda.javadiplomcloud.model.Role;
 
+import java.io.File;
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
@@ -17,7 +19,7 @@ class CloudManagerTest {
     UserEntity userEntity;
     CloudFileEntity cloudFileEntity;
     UUID uuid = UUID.fromString("aaa7e24d-bb2d-4885-900e-10771cdb7491");
-    private final String text = "Хай\nПроверка 2 строк";
+    private final byte[] text = "Hello".getBytes();
 
     @BeforeEach
     void setUp() {
@@ -58,15 +60,15 @@ class CloudManagerTest {
 //        //добавить удаление файла после проверки, возможно, в другом методе
 //    }
 
-//    @SneakyThrows
-//    @Test
-//    void uploadTest() {
-//        cloudManager.upload(text, cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
-//        File file = new File("src/main/resources/static/users/" + cloudFileEntity.getKey().toString() + "/" + cloudFileEntity.getFileName());
-//        System.out.println("Проверка пути к файлу:  " + file.toString());
-//        boolean result = file.exists();
-//        Assertions.assertTrue(result);
-//    }
+    @SneakyThrows
+    @Test
+    void uploadTest() {
+        cloudManager.upload(text, cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
+        File file = new File("src/main/resources/static/users/" + cloudFileEntity.getKey().toString() + "/" + cloudFileEntity.getFileName());
+        System.out.println("Проверка пути к файлу:  " + file.toString());
+        boolean result = file.exists();
+        Assertions.assertTrue(result);
+    }
 
     @Test
     void getFileTest() {

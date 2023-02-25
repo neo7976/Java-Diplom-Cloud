@@ -20,5 +20,5 @@ public interface CloudRepository extends JpaRepository<CloudFileEntity, Integer>
 
     @Query(value = "select * from cloud_file c where c.user_id = :userId and c.file_name= :fileName", nativeQuery = true)
     Optional<CloudFileEntity> findCloudFileEntityByFileName(@Param("userId") int userId,
-                                                            @NotBlank @Param("fileName") String fileName);
+                                                            @Param("fileName") String fileName);
 }

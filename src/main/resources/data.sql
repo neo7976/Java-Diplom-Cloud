@@ -20,4 +20,4 @@ values (3, 'ROLE_READE');
 
 select * from cloud_file c where c.user_id = :userId;
 
-update cloud_file
+select * from cloud_file c where c.user_id = :userId and c.file_name= :fileName;

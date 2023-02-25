@@ -14,6 +14,7 @@ import sobinda.javadiplomcloud.util.CloudManager;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.nio.file.FileSystemNotFoundException;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -61,10 +62,20 @@ public class CloudService {
     }
 
     @Transactional
-    public String getFile(String fileName) {
+    public CloudFileDto getFile(String fileName) {
         int userId = jwtToken.getAuthenticatedUser().getId();
+        log.info("Получаем ID пользователя по токену: {}", userId);
+        log.info("Начинаем искать файл в БД: {}", fileName);
         var cloudFile = cloudRepository.findCloudFileEntityByFileName(userId, fileName);
-        return cloudFile.map(cloudManager::getFile).orElse(null);
+        if (cloudFile.isPresent()) {
+            log.info("Файл {} найден на диске. Начинаем чтение байтов", cloudFile);
+            var resourceFromBd = cloudFile.map(cloudManager::getFile).get();
+            return CloudFileDto.builder()
+                    .fileName(fileName)
+                    .resource(resourceFromBd)
+                    .build();
+        }
+        throw new FileSystemNotFoundException("Такого файла нет в базе данных");
     }
 
     public String putFile() {

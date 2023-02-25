@@ -3,6 +3,7 @@ package sobinda.javadiplomcloud.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sobinda.javadiplomcloud.dto.CloudFileDto;
 import sobinda.javadiplomcloud.service.CloudService;
 
+import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -39,9 +41,12 @@ public class CloudController {
 
     //продумать, какой список
     @GetMapping("/file{filename}")
-    public String getFile(@PathVariable String filename) {
+    public ResponseEntity<byte[]> getFile(@RequestParam String filename) {
         log.info("Запрос на получение скачивания файла {}", filename);
-        return cloudService.getFile(filename);
+        var cloudFileDto = cloudService.getFile(filename);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + cloudFileDto.getFileName() + "\"")
+                .body(cloudFileDto.getResource());
     }
 
     //продумать

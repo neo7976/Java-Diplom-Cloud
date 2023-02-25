@@ -22,5 +22,6 @@ public class CloudFileDto {
     private Long size;
     private Instant date;
     private UUID key;
+    private byte[] resource;
 
 }
