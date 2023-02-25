@@ -21,7 +21,7 @@ public class CloudFileEntity {
     private Integer id;
 
     @NotBlank
-    @Column(name = "file_name", length = 20, nullable = false)
+    @Column(name = "file_name", length = 100, nullable = false)
     private String fileName;
 
     @Column(name = "file_size")

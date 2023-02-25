@@ -50,8 +50,8 @@ public class CloudService {
             log.info("Файл {} записан в БД под id {}", cloudFileEntity, cloudId);
         }
 
-//        cloudManager.upload(multipartFile.getBytes(), cloudFile.getKey().toString(), cloudFile.getFileName());
-        cloudManager.upload(multipartFile.getContentType(), cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
+        cloudManager.upload(multipartFile.getBytes(), cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
+//        cloudManager.upload(multipartFile.getContentType(), cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
         log.info("Файл записан на сервер");
 //        return cloudFileEntity;
     }
@@ -61,8 +61,9 @@ public class CloudService {
     }
 
     @Transactional
-    public String getFile(Integer id) {
-        var cloudFile = cloudRepository.findById(id);
+    public String getFile(String fileName) {
+        int userId = jwtToken.getAuthenticatedUser().getId();
+        var cloudFile = cloudRepository.findCloudFileEntityByFileName(userId, fileName);
         return cloudFile.map(cloudManager::getFile).orElse(null);
     }
 
@@ -73,7 +74,6 @@ public class CloudService {
     public List<CloudFileDto> getAllFile() {
         int userId = jwtToken.getAuthenticatedUser().getId();
 
-//        var cloudFileEntityList = cloudRepository.findAll();
         var cloudFileEntityList = cloudRepository.findAllByUserId(userId);
         return cloudFileEntityList.stream()
                 .map(file -> CloudFileDto.builder()

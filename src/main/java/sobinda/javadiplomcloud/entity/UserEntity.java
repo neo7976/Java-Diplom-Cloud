@@ -32,6 +32,7 @@ public class UserEntity {
     @Column(nullable = false, length = 15)
     private Set<Role> roles;
 
+    @Transient
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     private List<CloudFileEntity> cloudFileEntityList;
 

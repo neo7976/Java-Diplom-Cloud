@@ -15,28 +15,28 @@ public class CloudManager {
 
     //
 //    public void upload(byte[] resource, String keyName, String fileName) throws IOException {
-    public void upload(String resource, String keyName, String fileName) throws IOException {
+    public void upload(byte[] resource, String keyName, String fileName) throws IOException {
         File file = new File(DIRECTORY_PATH + "/" + keyName + "/" + fileName);
         if (!file.exists()) {
             boolean folderPath = new File(DIRECTORY_PATH).mkdir();
             boolean folder = new File(DIRECTORY_PATH + "/" + keyName).mkdir();
             file.createNewFile();
         }
-//        FileOutputStream stream = null;
-//
-//        try {
-//            stream = new FileOutputStream(file.toString());
-//            stream.write(resource);
-//        } finally {
-//            stream.close();
-//        }
+        FileOutputStream stream = null;
+
         try {
-            BufferedWriter bf = new BufferedWriter(new FileWriter(file));
-            bf.write(resource);
-            bf.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
+            stream = new FileOutputStream(file.toString());
+            stream.write(resource);
+        } finally {
+            stream.close();
         }
+//        try {
+//            BufferedWriter bf = new BufferedWriter(new FileWriter(file));
+//            bf.write(resource);
+//            bf.flush();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public String getFile(CloudFileEntity cloudFileEntity) {

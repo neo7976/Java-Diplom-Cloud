@@ -5,12 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sobinda.javadiplomcloud.dto.CloudFileDto;
-import sobinda.javadiplomcloud.entity.CloudFileEntity;
 import sobinda.javadiplomcloud.service.CloudService;
 
 import javax.validation.constraints.NotNull;
@@ -41,14 +38,15 @@ public class CloudController {
     }
 
     //продумать, какой список
-    @GetMapping("/file/{id}")
-    public String getFile(@PathVariable Integer id) {
-        return cloudService.getFile(id);
+    @GetMapping("/file{filename}")
+    public String getFile(@PathVariable String filename) {
+        log.info("Запрос на получение скачивания файла {}", filename);
+        return cloudService.getFile(filename);
     }
 
     //продумать
-    @PutMapping("/file/{id}")
-    public String putFile(@PathVariable Integer id) {
+    @PutMapping("/file{filename}")
+    public String putFile(@PathVariable String filename) {
         return cloudService.putFile();
     }
 
