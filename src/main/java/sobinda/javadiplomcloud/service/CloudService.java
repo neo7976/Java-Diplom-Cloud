@@ -69,8 +69,9 @@ public class CloudService {
         log.info("Файл записан на сервер");
     }
 
-    public String deleteFile() {
-        return null;
+    public void deleteFile(String filename) {
+     //todo дописать реализацию
+
     }
 
     @Transactional

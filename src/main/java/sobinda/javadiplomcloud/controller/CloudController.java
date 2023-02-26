@@ -34,9 +34,11 @@ public class CloudController {
     }
 
     //продумать
-    @DeleteMapping("/file")
-    public String deleteFile() {
-        return cloudService.deleteFile();
+    @DeleteMapping("/file{filename}")
+    public ResponseEntity<Void> deleteFile(@RequestParam String filename) {
+        log.info("Начинаем искать файл {} для удаления", filename);
+        cloudService.deleteFile(filename);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     //продумать, какой список
