@@ -35,40 +35,15 @@ public class CloudManager {
         } finally {
             stream.close();
         }
-//        try {
-//            BufferedWriter bf = new BufferedWriter(new FileWriter(file));
-//            bf.write(resource);
-//            bf.flush();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     @SneakyThrows
     public byte[] getFile(CloudFileEntity cloudFileEntity) {
-//        StringBuilder sb = new StringBuilder();
-//        try {
-//            BufferedReader it = new BufferedReader(new FileReader(DIRECTORY_PATH +
-//                    "/" + cloudFileEntity.getKey().toString() +
-//                    "/" + cloudFileEntity.getFileName()));
-//            String line;
-//            while ((line = it.readLine()) != null) {
-//                sb.append(line);
-//                sb.append("\n");
-//            }
-//            it.close();
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        //убираем последний \n
-//        sb.setLength(sb.length() - 1);
-//
-//        String result = sb.toString();
-//        System.out.println(result);
-//        return result;
-
-        return Files.readAllBytes(Paths.get(DIRECTORY_PATH,
+        return Files.readAllBytes(Paths.get(
+                DIRECTORY_PATH,
                 cloudFileEntity.getKey().toString(),
-                cloudFileEntity.getFileName()));
+                cloudFileEntity.getFileName()
+        ));
     }
+
 }

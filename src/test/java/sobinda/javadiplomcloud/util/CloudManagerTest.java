@@ -11,6 +11,7 @@ import sobinda.javadiplomcloud.model.Role;
 
 import java.io.File;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 
@@ -29,7 +30,6 @@ class CloudManagerTest {
                 .password("1111")
                 .roles(Set.of(Role.ROLE_READ, Role.ROLE_ADMIN))
                 .build();
-        System.out.println(userEntity);
 
         cloudFileEntity = CloudFileEntity.builder()
                 .fileName("testFile.txt")
@@ -38,7 +38,6 @@ class CloudManagerTest {
                 .key(uuid)
                 .userEntity(userEntity)
                 .build();
-        System.out.println(cloudFileEntity);
     }
 
     @AfterEach
@@ -48,24 +47,12 @@ class CloudManagerTest {
         cloudFileEntity = null;
     }
 
-//    @SneakyThrows
-//    @Test
-//    void uploadTest() {
-//        byte[] test = new byte[]{0, 5, 4, 5, 4, 4, 12, 2, 5, 4, 1};
-//        cloudManager.upload(test, cloudFile.getKey().toString(), cloudFile.getFileName());
-//        File file = new File("src/main/resources/static/users/" + cloudFile.getKey().toString() + "/" + cloudFile.getFileName());
-//        System.out.println("Проверка пути к файлу:  "  + file.toString());
-//        boolean result = file.exists();
-//        Assertions.assertTrue(result);
-//        //добавить удаление файла после проверки, возможно, в другом методе
-//    }
-
     @SneakyThrows
     @Test
     void uploadTest() {
         cloudManager.upload(text, cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
         File file = new File("src/main/resources/static/users/" + cloudFileEntity.getKey().toString() + "/" + cloudFileEntity.getFileName());
-        System.out.println("Проверка пути к файлу:  " + file.toString());
+        System.out.println("Проверка пути к файлу:  " + file);
         boolean result = file.exists();
         Assertions.assertTrue(result);
     }
@@ -73,6 +60,6 @@ class CloudManagerTest {
     @Test
     void getFileTest() {
         var result = cloudManager.getFile(cloudFileEntity);
-        Assertions.assertEquals(text, result);
+        Assertions.assertEquals(Arrays.toString(text), Arrays.toString(result));
     }
 }

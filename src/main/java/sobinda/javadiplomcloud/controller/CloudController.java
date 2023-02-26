@@ -44,6 +44,7 @@ public class CloudController {
     public ResponseEntity<byte[]> getFile(@RequestParam String filename) {
         log.info("Запрос на получение скачивания файла {}", filename);
         var cloudFileDto = cloudService.getFile(filename);
+        log.info("Запрос на скачивание файла {} получен. Начинаем скачивание...", filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + cloudFileDto.getFileName() + "\"")
                 .body(cloudFileDto.getResource());
@@ -51,7 +52,7 @@ public class CloudController {
 
     //продумать
     @PutMapping("/file{filename}")
-    public String putFile(@PathVariable String filename) {
+    public String putFile(@RequestParam String filename) {
         return cloudService.putFile();
     }
 

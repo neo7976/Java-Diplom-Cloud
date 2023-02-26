@@ -34,6 +34,22 @@ public class CloudService {
     public void uploadFile(MultipartFile multipartFile, String fileName) {
         int userId = jwtToken.getAuthenticatedUser().getId();
 
+        var findCloudFile = cloudRepository.findCloudFileEntityByFileName(userId, fileName);
+        if (findCloudFile.isPresent()) {
+            log.info("Такой файл имеется в БД, начинаем переименовывать {}", fileName);
+            String renameFile = fileName;
+            var indexPoint = fileName.indexOf(".");
+            for (int i = 1; i < Integer.MAX_VALUE; i++) {
+                renameFile = String.format(fileName.substring(0, indexPoint) + " (%d)" + fileName.substring(indexPoint), i);
+                findCloudFile = cloudRepository.findCloudFileEntityByFileName(userId, renameFile);
+                if (findCloudFile.isEmpty()) {
+                    break;
+                }
+            }
+            fileName = renameFile;
+        }
+
+        log.info("Такого файла нет, можно начинать запись {}", fileName);
         CloudFileEntity cloudFileEntity = CloudFileEntity.builder()
                 .fileName(fileName)
                 .size(multipartFile.getSize())
@@ -45,16 +61,12 @@ public class CloudService {
                                 .build())
                 .build();
 
-        log.info(cloudFileEntity.toString());
         var cloudId = cloudRepository.save(cloudFileEntity).getId();
         if (cloudRepository.findById(cloudId).isPresent()) {
-            log.info("Файл {} записан в БД под id {}", cloudFileEntity, cloudId);
+            log.info("Файл {} записан в БД под id '{}'", fileName, cloudId);
         }
-
         cloudManager.upload(multipartFile.getBytes(), cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
-//        cloudManager.upload(multipartFile.getContentType(), cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
         log.info("Файл записан на сервер");
-//        return cloudFileEntity;
     }
 
     public String deleteFile() {
@@ -68,7 +80,7 @@ public class CloudService {
         log.info("Начинаем искать файл в БД: {}", fileName);
         var cloudFile = cloudRepository.findCloudFileEntityByFileName(userId, fileName);
         if (cloudFile.isPresent()) {
-            log.info("Файл {} найден на диске. Начинаем чтение байтов", cloudFile);
+            log.info("Файл {} найден на диске. Начинаем чтение байтов", cloudFile.get().getFileName());
             var resourceFromBd = cloudFile.map(cloudManager::getFile).get();
             return CloudFileDto.builder()
                     .fileName(fileName)
@@ -78,6 +90,7 @@ public class CloudService {
         throw new FileSystemNotFoundException("Такого файла нет в базе данных");
     }
 
+    @Transactional
     public String putFile() {
         return null;
     }
