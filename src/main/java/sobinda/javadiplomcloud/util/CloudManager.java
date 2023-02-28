@@ -55,4 +55,12 @@ public class CloudManager {
         File file = new File(paths.toUri());
         return !file.exists();
     }
+
+    public boolean renameFileTo(String oldFileName, CloudFileEntity cloudFile) {
+        Path paths = Paths.get(DIRECTORY_PATH, cloudFile.getKey().toString(), oldFileName);
+        File file = new File(paths.toUri());
+        Path renamePaths = Paths.get(DIRECTORY_PATH, cloudFile.getKey().toString(), cloudFile.getFileName());
+        File renameFile = new File(renamePaths.toUri());
+        return file.renameTo(renameFile);
+    }
 }

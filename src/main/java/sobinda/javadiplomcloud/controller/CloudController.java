@@ -56,8 +56,11 @@ public class CloudController {
 
     //продумать
     @PutMapping("/file{filename}")
-    public String putFile(@RequestParam String filename) {
-        return cloudService.putFile();
+    public ResponseEntity<Void> putFile(@RequestParam String filename) {
+        if (cloudService.putFile(filename)) {
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")

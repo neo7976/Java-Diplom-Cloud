@@ -14,10 +14,9 @@ import sobinda.javadiplomcloud.util.CloudManager;
 
 import javax.transaction.Transactional;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.FileSystemNotFoundException;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -33,17 +32,15 @@ public class CloudService {
     @SneakyThrows
     @Transactional()
     public boolean uploadFile(MultipartFile multipartFile, String fileName) {
-        int userId = jwtToken.getAuthenticatedUser().getId();
-
-        var findCloudFile = cloudRepository.findCloudFileEntityByFileName(userId, fileName);
-        if (findCloudFile.isPresent()) {
+        Optional<CloudFileEntity> cloudFile = getCloudFileEntity(fileName);
+        if (cloudFile.isPresent()) {
             log.info("Такой файл имеется в БД, начинаем переименовывать {}", fileName);
             String renameFile = fileName;
             var indexPoint = fileName.indexOf(".");
             for (int i = 1; i < Integer.MAX_VALUE; i++) {
                 renameFile = String.format(fileName.substring(0, indexPoint) + " (%d)" + fileName.substring(indexPoint), i);
-                findCloudFile = cloudRepository.findCloudFileEntityByFileName(userId, renameFile);
-                if (findCloudFile.isEmpty()) {
+                cloudFile = getCloudFileEntity(fileName);
+                if (cloudFile.isEmpty()) {
                     break;
                 }
             }
@@ -58,7 +55,7 @@ public class CloudService {
                 .key(UUID.randomUUID())
                 .userEntity(
                         UserEntity.builder()
-                                .id(userId)
+                                .id(jwtToken.getAuthenticatedUser().getId())
                                 .build())
                 .build();
 
@@ -80,8 +77,7 @@ public class CloudService {
     @SneakyThrows
     @Transactional()
     public boolean deleteFile(String filename) {
-        int userId = jwtToken.getAuthenticatedUser().getId();
-        var foundFile = cloudRepository.findCloudFileEntityByFileName(userId, filename);
+        Optional<CloudFileEntity> foundFile = getCloudFileEntity(filename);
         if (foundFile.isEmpty()) {
             String msg = String.format("Файл %s не существует или у вас нет права доступа", filename);
             log.info(msg);
@@ -91,38 +87,50 @@ public class CloudService {
         cloudRepository.deleteById(idFoundFile);
         log.info("Произвели удаление из БД файла:  {}", filename);
         if (cloudRepository.findById(idFoundFile).isPresent()) {
-            String msg = "Файл не удалось удалить из БД";
-            log.error(msg);
-            throw new RuntimeException(msg);
+            fileNotDeleted("Файл не удалось удалить из БД");
         }
         if (!cloudManager.delete(foundFile.get())) {
-            String msg = "Файл не удалось удалить с сервера";
-            log.error(msg);
-            throw new RuntimeException(msg);
+            fileNotDeleted("Файл не удалось удалить с сервера");
         }
         return true;
     }
 
+
+    @SneakyThrows
     @Transactional
     public CloudFileDto getFile(String fileName) {
-        int userId = jwtToken.getAuthenticatedUser().getId();
-        log.info("Получаем ID пользователя по токену: {}", userId);
-        log.info("Начинаем искать файл в БД: {}", fileName);
-        var cloudFile = cloudRepository.findCloudFileEntityByFileName(userId, fileName);
+        Optional<CloudFileEntity> cloudFile = getCloudFileEntity(fileName);
         if (cloudFile.isPresent()) {
-            log.info("Файл {} найден на диске. Начинаем чтение байтов", cloudFile.get().getFileName());
+            log.info("Файл {} найден на диске", fileName);
             var resourceFromBd = cloudFile.map(cloudManager::getFile).get();
             return CloudFileDto.builder()
                     .fileName(fileName)
                     .resource(resourceFromBd)
                     .build();
+        } else {
+            fileNotFound("Файл не удалось найди в БД");
+            return null;
         }
-        throw new FileSystemNotFoundException("Такого файла нет в базе данных");
     }
 
+    @SneakyThrows
     @Transactional()
-    public String putFile() {
-        return null;
+    public boolean putFile(String fileName) {
+        Optional<CloudFileEntity> cloudFile = getCloudFileEntity(fileName);
+        if (cloudFile.isEmpty()) {
+            fileNotFound("Файл не удалось найти в БД");
+        }
+        String oldFileName = cloudFile.get().getFileName();
+        cloudRepository.findByIdAndRenameFileName(cloudFile.get().getId(), fileName);
+        var renameCloudFile = getCloudFileEntity(fileName);
+        if (renameCloudFile.isEmpty()) {
+            fileNotFound("Не удалось переименовать файл в БД");
+        }
+        //todo Требуется переименовать файл на сервере
+        if (!cloudManager.renameFileTo(oldFileName, renameCloudFile.get())) {
+            fileNotFound("Не удалось переименовать файл на сервере");
+        }
+        return true;
     }
 
     public List<CloudFileDto> getAllFile() {
@@ -137,5 +145,22 @@ public class CloudService {
                         .size(file.getSize())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    private Optional<CloudFileEntity> getCloudFileEntity(String fileName) {
+        int userId = jwtToken.getAuthenticatedUser().getId();
+        log.info("Получаем ID пользователя по токену: {}", userId);
+        log.info("Начинаем искать файл в БД: {}", fileName);
+        return cloudRepository.findCloudFileEntityByFileName(userId, fileName);
+    }
+
+    private static void fileNotFound(String msg) throws FileNotFoundException {
+        log.error(msg);
+        throw new FileNotFoundException(msg);
+    }
+
+    private static void fileNotDeleted(String msg) {
+        log.error(msg);
+        throw new RuntimeException(msg);
     }
 }
