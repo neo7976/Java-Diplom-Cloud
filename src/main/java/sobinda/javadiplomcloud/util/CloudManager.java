@@ -1,17 +1,15 @@
 package sobinda.javadiplomcloud.util;
 
-import com.nimbusds.jose.util.Resource;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
 import sobinda.javadiplomcloud.entity.CloudFileEntity;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 
 @NoArgsConstructor
 //добавил для сервиса
@@ -20,7 +18,7 @@ public class CloudManager {
     //продумать, как задавать пути
     private final String DIRECTORY_PATH = "src/main/resources/static/users";
 
-    public void upload(byte[] resource, String keyName, String fileName) throws IOException {
+    public boolean upload(byte[] resource, String keyName, String fileName) throws IOException {
         File file = new File(DIRECTORY_PATH + "/" + keyName + "/" + fileName);
         if (!file.exists()) {
             boolean folderPath = new File(DIRECTORY_PATH).mkdir();
@@ -35,6 +33,7 @@ public class CloudManager {
         } finally {
             stream.close();
         }
+        return file.exists();
     }
 
     @SneakyThrows
@@ -46,4 +45,14 @@ public class CloudManager {
         ));
     }
 
+    @SneakyThrows
+    public boolean delete(CloudFileEntity cloudFile) {
+        Path paths = Paths.get(DIRECTORY_PATH, cloudFile.getKey().toString());
+        Files.walk(paths)
+                .sorted(Comparator.reverseOrder())
+                .map(Path::toFile)
+                .forEach(File::delete);
+        File file = new File(paths.toUri());
+        return !file.exists();
+    }
 }

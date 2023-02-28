@@ -29,19 +29,21 @@ public class CloudController {
     public ResponseEntity<Void> uploadFile(@NotNull @RequestParam("file") MultipartFile multipartFile,
                                            @RequestParam("filename") String fileName) {
         log.info("Получили файл на загрузку: {}", fileName);
-        cloudService.uploadFile(multipartFile, fileName);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        if (cloudService.uploadFile(multipartFile, fileName)) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
-    //продумать
     @DeleteMapping("/file{filename}")
     public ResponseEntity<Void> deleteFile(@RequestParam String filename) {
         log.info("Начинаем искать файл {} для удаления", filename);
-        cloudService.deleteFile(filename);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        if (cloudService.deleteFile(filename)) {
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
-    //продумать, какой список
     @GetMapping("/file{filename}")
     public ResponseEntity<byte[]> getFile(@RequestParam String filename) {
         log.info("Запрос на получение скачивания файла {}", filename);
@@ -58,8 +60,7 @@ public class CloudController {
         return cloudService.putFile();
     }
 
-    //продумать
-//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/list")
     public ResponseEntity<List<CloudFileDto>> getAllFile() {
         var result = cloudService.getAllFile();

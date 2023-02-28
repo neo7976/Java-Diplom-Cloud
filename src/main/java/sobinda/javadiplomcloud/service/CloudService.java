@@ -13,6 +13,7 @@ import sobinda.javadiplomcloud.security.JWTToken;
 import sobinda.javadiplomcloud.util.CloudManager;
 
 import javax.transaction.Transactional;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileSystemNotFoundException;
 import java.time.Instant;
@@ -30,8 +31,8 @@ public class CloudService {
     private final CloudRepository cloudRepository;
 
     @SneakyThrows
-    @Transactional(rollbackOn = {IOException.class})
-    public void uploadFile(MultipartFile multipartFile, String fileName) {
+    @Transactional()
+    public boolean uploadFile(MultipartFile multipartFile, String fileName) {
         int userId = jwtToken.getAuthenticatedUser().getId();
 
         var findCloudFile = cloudRepository.findCloudFileEntityByFileName(userId, fileName);
@@ -65,13 +66,41 @@ public class CloudService {
         if (cloudRepository.findById(cloudId).isPresent()) {
             log.info("Файл {} записан в БД под id '{}'", fileName, cloudId);
         }
-        cloudManager.upload(multipartFile.getBytes(), cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
+        if (!cloudManager.upload(multipartFile.getBytes(),
+                cloudFileEntity.getKey().toString(),
+                cloudFileEntity.getFileName())) {
+            String msg = "Не получилось записать файл";
+            log.error(msg);
+            throw new FileNotFoundException(msg);
+        }
         log.info("Файл записан на сервер");
+        return true;
     }
 
-    public void deleteFile(String filename) {
-     //todo дописать реализацию
-
+    @SneakyThrows
+    @Transactional()
+    public boolean deleteFile(String filename) {
+        int userId = jwtToken.getAuthenticatedUser().getId();
+        var foundFile = cloudRepository.findCloudFileEntityByFileName(userId, filename);
+        if (foundFile.isEmpty()) {
+            String msg = String.format("Файл %s не существует или у вас нет права доступа", filename);
+            log.info(msg);
+            throw new FileNotFoundException(msg);
+        }
+        int idFoundFile = foundFile.get().getId();
+        cloudRepository.deleteById(idFoundFile);
+        log.info("Произвели удаление из БД файла:  {}", filename);
+        if (cloudRepository.findById(idFoundFile).isPresent()) {
+            String msg = "Файл не удалось удалить из БД";
+            log.error(msg);
+            throw new RuntimeException(msg);
+        }
+        if (!cloudManager.delete(foundFile.get())) {
+            String msg = "Файл не удалось удалить с сервера";
+            log.error(msg);
+            throw new RuntimeException(msg);
+        }
+        return true;
     }
 
     @Transactional
@@ -91,7 +120,7 @@ public class CloudService {
         throw new FileSystemNotFoundException("Такого файла нет в базе данных");
     }
 
-    @Transactional
+    @Transactional()
     public String putFile() {
         return null;
     }
