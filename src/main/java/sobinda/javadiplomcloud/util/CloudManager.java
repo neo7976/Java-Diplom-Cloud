@@ -61,7 +61,6 @@ public class CloudManager {
         File file = new File(paths.toUri());
         Path renamePaths = Paths.get(DIRECTORY_PATH, oldCloudFileEntity.getKey().toString(), renameFileName);
         File renameFile = new File(renamePaths.toUri());
-        System.out.println(renamePaths);
         return file.renameTo(renameFile);
     }
 }

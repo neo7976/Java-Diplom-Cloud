@@ -22,6 +22,7 @@ class CloudManagerTest {
     UUID uuid = UUID.fromString("aaa7e24d-bb2d-4885-900e-10771cdb7491");
     private final byte[] text = "Hello".getBytes();
 
+    @SneakyThrows
     @BeforeEach
     void setUp() {
         cloudManager = new CloudManager();
@@ -38,10 +39,13 @@ class CloudManagerTest {
                 .key(uuid)
                 .userEntity(userEntity)
                 .build();
+
+        cloudManager.upload(text, cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
     }
 
     @AfterEach
     void tearDown() {
+        cloudManager.delete(cloudFileEntity);
         cloudManager = null;
         userEntity = null;
         cloudFileEntity = null;
@@ -50,12 +54,19 @@ class CloudManagerTest {
     @SneakyThrows
     @Test
     void uploadTest() {
-        cloudManager.upload(text, cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
         File file = new File("src/main/resources/static/users/" + cloudFileEntity.getKey().toString() + "/" + cloudFileEntity.getFileName());
         System.out.println("Проверка пути к файлу:  " + file);
         boolean result = file.exists();
         Assertions.assertTrue(result);
-        cloudManager.delete(cloudFileEntity);
+    }
+
+    @SneakyThrows
+    @Test
+    void deleteTest() {
+        var result = cloudManager.delete(cloudFileEntity);
+        Assertions.assertTrue(result);
+        System.out.println("Файл получилось удалить: " + result);
+        cloudManager.upload(text, cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
     }
 
     @Test
@@ -67,8 +78,9 @@ class CloudManagerTest {
     @SneakyThrows
     @Test
     public void renameFileTo() {
-        cloudManager.upload(text, cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
-        var result = cloudManager.renameFileTo(cloudFileEntity, "renameTest");
+        String testName = "renameTest";
+        var result = cloudManager.renameFileTo(cloudFileEntity, testName);
         Assertions.assertTrue(result);
+        cloudFileEntity.setFileName(testName);
     }
 }

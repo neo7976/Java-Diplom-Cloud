@@ -57,7 +57,7 @@ public class CloudController {
     //продумать
     @PutMapping("/file{filename}")
     public ResponseEntity<Void> putFile(@RequestParam String filename, @RequestBody CloudFileDto cloudFileDto) {
-        var dsfd = cloudService.putFile(filename, cloudFileDto);
+        cloudService.putFile(filename, cloudFileDto);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
