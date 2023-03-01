@@ -21,8 +21,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class CloudService {
 
     private final CloudManager cloudManager;
@@ -128,7 +128,6 @@ public class CloudService {
         if (renameCloudFile.isEmpty()) {
             fileNotFound("Не удалось переименовать файл в БД");
         }
-        //todo Требуется переименовать файл на сервере
         if (!cloudManager.renameFileTo(cloudFile.get(), cloudFileDto.getFileName())) {
             fileNotFound("Не удалось переименовать файл на сервере");
         }
