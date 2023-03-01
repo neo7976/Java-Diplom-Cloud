@@ -24,4 +24,7 @@ public class CloudFileDto {
     private UUID key;
     private byte[] resource;
 
+    public CloudFileDto(String fileName) {
+        this.fileName = fileName;
+    }
 }

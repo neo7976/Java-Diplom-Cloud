@@ -56,12 +56,11 @@ public class CloudController {
 
     //продумать
     @PutMapping("/file{filename}")
-    public ResponseEntity<Void> putFile(@RequestParam String filename) {
-        if (cloudService.putFile(filename)) {
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        }
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+    public ResponseEntity<Void> putFile(@RequestParam String filename, @RequestBody CloudFileDto cloudFileDto) {
+        var dsfd = cloudService.putFile(filename, cloudFileDto);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
 
     //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/list")

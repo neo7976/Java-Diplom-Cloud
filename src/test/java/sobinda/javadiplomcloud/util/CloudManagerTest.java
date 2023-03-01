@@ -55,11 +55,20 @@ class CloudManagerTest {
         System.out.println("Проверка пути к файлу:  " + file);
         boolean result = file.exists();
         Assertions.assertTrue(result);
+        cloudManager.delete(cloudFileEntity);
     }
 
     @Test
     void getFileTest() {
         var result = cloudManager.getFile(cloudFileEntity);
         Assertions.assertEquals(Arrays.toString(text), Arrays.toString(result));
+    }
+
+    @SneakyThrows
+    @Test
+    public void renameFileTo() {
+        cloudManager.upload(text, cloudFileEntity.getKey().toString(), cloudFileEntity.getFileName());
+        var result = cloudManager.renameFileTo(cloudFileEntity, "renameTest");
+        Assertions.assertTrue(result);
     }
 }

@@ -115,19 +115,21 @@ public class CloudService {
 
     @SneakyThrows
     @Transactional()
-    public boolean putFile(String fileName) {
+    public boolean putFile(String fileName, CloudFileDto cloudFileDto) {
         Optional<CloudFileEntity> cloudFile = getCloudFileEntity(fileName);
         if (cloudFile.isEmpty()) {
             fileNotFound("Файл не удалось найти в БД");
         }
-        String oldFileName = cloudFile.get().getFileName();
-        cloudRepository.findByIdAndRenameFileName(cloudFile.get().getId(), fileName);
-        var renameCloudFile = getCloudFileEntity(fileName);
+        if (getCloudFileEntity(cloudFileDto.getFileName()).isPresent()) {
+            fileNotDeleted("Такой файл существует");
+        }
+        cloudRepository.findByIdAndRenameFileName(cloudFile.get().getId(), cloudFileDto.getFileName());
+        var renameCloudFile = getCloudFileEntity(cloudFileDto.getFileName());
         if (renameCloudFile.isEmpty()) {
             fileNotFound("Не удалось переименовать файл в БД");
         }
         //todo Требуется переименовать файл на сервере
-        if (!cloudManager.renameFileTo(oldFileName, renameCloudFile.get())) {
+        if (!cloudManager.renameFileTo(cloudFile.get(), cloudFileDto.getFileName())) {
             fileNotFound("Не удалось переименовать файл на сервере");
         }
         return true;
