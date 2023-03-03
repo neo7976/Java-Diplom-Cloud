@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import sobinda.javadiplomcloud.dto.CloudFileDto;
 import sobinda.javadiplomcloud.entity.CloudFileEntity;
 import sobinda.javadiplomcloud.entity.UserEntity;
 import sobinda.javadiplomcloud.model.Role;
@@ -44,6 +45,7 @@ class CloudServiceTest {
     TestEntityManager entityManager;
     UserEntity user;
     CloudFileEntity cloudFile;
+    CloudFileDto cloudFileDto;
     private final int USER_ID = 100;
     private final int CLOUD_FILE_ID = 999;
     private final String FILE_NAME = "testFile.pdf";
@@ -63,6 +65,11 @@ class CloudServiceTest {
                 .size(265L)
                 .key(UUID.randomUUID())
                 .fileName(FILE_NAME)
+                .build();
+
+        cloudFileDto = CloudFileDto.builder()
+                .fileName(FILE_NAME)
+                .resource("TESTING".getBytes())
                 .build();
 
         when(jwtToken.getAuthenticatedUser()).thenReturn(user);
@@ -101,7 +108,12 @@ class CloudServiceTest {
     }
 
     @Test
-    void getFile() {
+    void getFileTest() {
+        when(cloudRepository.findCloudFileEntityByFileName(USER_ID, FILE_NAME)).thenReturn(Optional.of(cloudFile));
+        when(cloudManager.getFile(any(CloudFileEntity.class))).thenReturn(cloudFileDto.getResource());
+
+        var result = cloudService.getFile(FILE_NAME);
+        Assertions.assertEquals(cloudFileDto, result);
     }
 
     @Test
