@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JWTFilter extends GenericFilterBean {
 
-    JWTToken jwtToken;
+    private final JWTToken jwtToken;
 
     private String getTokenFromRequest(HttpServletRequest request) {
         String bearer = request.getHeader(AuthenticationConfigConstants.AUTH_TOKEN);
