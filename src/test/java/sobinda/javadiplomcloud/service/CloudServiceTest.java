@@ -37,12 +37,13 @@ class CloudServiceTest {
     CloudManager cloudManager;
     @Mock
     JWTToken jwtToken;
-    @InjectMocks
-    CloudService cloudService;
     @Mock
     CloudRepository cloudRepository;
-    @Mock
-    TestEntityManager entityManager;
+    @InjectMocks
+    CloudService cloudService;
+
+    //    @Mock
+//    TestEntityManager entityManager;
     UserEntity user;
     CloudFileEntity cloudFile;
     CloudFileDto cloudFileDto;
@@ -131,5 +132,9 @@ class CloudServiceTest {
 
     @Test
     void getAllFile() {
+        var result = cloudService.getAllFile();
+        for (CloudFileDto fileDto : result) {
+            Assertions.assertEquals(cloudFileDto, fileDto);
+        }
     }
 }
