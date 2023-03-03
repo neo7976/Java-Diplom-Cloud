@@ -117,7 +117,16 @@ class CloudServiceTest {
     }
 
     @Test
-    void putFile() {
+    void putFileTest() {
+        String renameFile = "RenameFile.pdf";
+        when(cloudRepository.findCloudFileEntityByFileName(USER_ID, FILE_NAME)).thenReturn(Optional.of(cloudFile));
+        CloudFileDto cloudFileDtoRename = CloudFileDto.builder()
+                .fileName(renameFile)
+                .build();
+        when(cloudManager.renameFileTo(cloudFile, renameFile)).thenReturn(true);
+
+        var result = cloudService.putFile(FILE_NAME, cloudFileDtoRename);
+        Assertions.assertTrue(result);
     }
 
     @Test

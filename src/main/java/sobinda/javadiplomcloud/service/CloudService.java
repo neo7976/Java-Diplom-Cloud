@@ -124,10 +124,9 @@ public class CloudService {
             fileNotDeleted("Такой файл существует");
         }
         cloudRepository.findByIdAndRenameFileName(cloudFile.get().getId(), cloudFileDto.getFileName());
-        var renameCloudFile = getCloudFileEntity(cloudFileDto.getFileName());
-        if (renameCloudFile.isEmpty()) {
-            fileNotFound("Не удалось переименовать файл в БД");
-        }
+//            if (getCloudFileEntity(cloudFileDto.getFileName()).isEmpty()) {
+//            fileNotFound("Не удалось переименовать файл в БД");
+//        }
         if (!cloudManager.renameFileTo(cloudFile.get(), cloudFileDto.getFileName())) {
             fileNotFound("Не удалось переименовать файл на сервере");
         }
