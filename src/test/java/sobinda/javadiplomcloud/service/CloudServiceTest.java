@@ -8,33 +8,24 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
+import sobinda.javadiplomcloud.entity.CloudFileEntity;
 import sobinda.javadiplomcloud.entity.UserEntity;
 import sobinda.javadiplomcloud.model.Role;
 import sobinda.javadiplomcloud.repository.CloudRepository;
-import sobinda.javadiplomcloud.repository.UsersRepository;
 import sobinda.javadiplomcloud.security.JWTToken;
 import sobinda.javadiplomcloud.util.CloudManager;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.time.Instant;
 import java.util.Set;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 //@DataJpaTest
@@ -46,14 +37,14 @@ class CloudServiceTest {
     JWTToken jwtToken;
     @InjectMocks
     CloudService cloudService;
-    @Autowired
+    @Mock
     CloudRepository cloudRepository;
-    @Autowired
-    UsersRepository usersRepository;
-    @Autowired
+    @Mock
     TestEntityManager entityManager;
     UserEntity user;
+    CloudFileEntity cloudFile;
     private final int USER_ID = 100;
+    private final int CLOUD_FILE_ID = 999;
     private final String FILE_NAME = "testFile.pdf";
 
     @BeforeEach
@@ -64,29 +55,35 @@ class CloudServiceTest {
                 .password("$2a$10$L4cA.wDXaxBESV/FUGchT.WyEFX6qgMrdGGjDl7kt9QMFVWobi5Ne")
                 .roles(Set.of(Role.ROLE_WRITE))
                 .build();
-        System.out.println(user);
-//        this.entityManager.persistAndFlush(user);
+
+        cloudFile = CloudFileEntity.builder()
+                .id(CLOUD_FILE_ID)
+                .date(Instant.now())
+                .size(265L)
+                .key(UUID.randomUUID())
+                .fileName(FILE_NAME)
+                .build();
     }
 
     @AfterEach
     void tearDown() {
-        cloudService = null;
-        cloudRepository = null;
-        cloudManager = null;
+        user = null;
+        cloudFile = null;
     }
 
     @SneakyThrows
     @Test
-    void uploadFile() {
+    void uploadFileTest() {
         MultipartFile mf = new MockMultipartFile(
                 "testFile",
                 FILE_NAME,
                 MediaType.TEXT_PLAIN_VALUE,
                 "testUploadFile".getBytes()
         );
-//
+
         when(jwtToken.getAuthenticatedUser()).thenReturn(user);
         when(cloudManager.upload(any(), any(), any())).thenReturn(true);
+        when(cloudRepository.save(any(CloudFileEntity.class))).thenReturn(cloudFile);
 
         boolean result = cloudService.uploadFile(mf, FILE_NAME);
         Assertions.assertTrue(result);
