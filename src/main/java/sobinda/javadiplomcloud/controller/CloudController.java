@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import sobinda.javadiplomcloud.dto.CloudFileDto;
 import sobinda.javadiplomcloud.service.CloudService;
 
-import javax.persistence.EntityManager;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -30,9 +29,9 @@ public class CloudController {
                                            @RequestParam("filename") String fileName) {
         log.info("Получили файл на загрузку: {}", fileName);
         if (cloudService.uploadFile(multipartFile, fileName)) {
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @DeleteMapping("/file{filename}")
@@ -41,7 +40,7 @@ public class CloudController {
         if (cloudService.deleteFile(filename)) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.CONFLICT);
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping("/file{filename}")
@@ -58,7 +57,7 @@ public class CloudController {
     @PutMapping("/file{filename}")
     public ResponseEntity<Void> putFile(@RequestParam String filename, @RequestBody CloudFileDto cloudFileDto) {
         cloudService.putFile(filename, cloudFileDto);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
