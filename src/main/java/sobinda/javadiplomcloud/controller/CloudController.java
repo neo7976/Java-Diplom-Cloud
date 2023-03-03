@@ -39,7 +39,7 @@ public class CloudController {
     public ResponseEntity<Void> deleteFile(@RequestParam String filename) {
         log.info("Начинаем искать файл {} для удаления", filename);
         if (cloudService.deleteFile(filename)) {
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }

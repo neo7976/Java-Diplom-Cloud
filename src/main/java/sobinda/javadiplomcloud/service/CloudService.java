@@ -14,6 +14,7 @@ import sobinda.javadiplomcloud.util.CloudManager;
 
 import javax.transaction.Transactional;
 import java.io.FileNotFoundException;
+import java.nio.file.FileAlreadyExistsException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -66,9 +67,7 @@ public class CloudService {
         if (!cloudManager.upload(multipartFile.getBytes(),
                 cloudFileEntity.getKey().toString(),
                 cloudFileEntity.getFileName())) {
-            String msg = "Не получилось записать файл";
-            log.error(msg);
-            throw new FileNotFoundException(msg);
+            fileNotFound("Не получилось записать файл");
         }
         log.info("Файл записан на сервер");
         return true;
@@ -87,10 +86,10 @@ public class CloudService {
         cloudRepository.deleteById(idFoundFile);
         log.info("Произвели удаление из БД файла:  {}", filename);
         if (cloudRepository.findById(idFoundFile).isPresent()) {
-            fileNotDeleted("Файл не удалось удалить из БД");
+            fileAlreadyExists("Файл не удалось удалить из БД");
         }
         if (!cloudManager.delete(foundFile.get())) {
-            fileNotDeleted("Файл не удалось удалить с сервера");
+            fileAlreadyExists("Файл не удалось удалить с сервера");
         }
         return true;
     }
@@ -121,7 +120,7 @@ public class CloudService {
             fileNotFound("Файл не удалось найти в БД");
         }
         if (getCloudFileEntity(cloudFileDto.getFileName()).isPresent()) {
-            fileNotDeleted("Такой файл существует");
+            fileAlreadyExists("Такой файл существует");
         }
         cloudRepository.findByIdAndRenameFileName(cloudFile.get().getId(), cloudFileDto.getFileName());
 //            if (getCloudFileEntity(cloudFileDto.getFileName()).isEmpty()) {
@@ -159,8 +158,8 @@ public class CloudService {
         throw new FileNotFoundException(msg);
     }
 
-    private static void fileNotDeleted(String msg) {
+    private static void fileAlreadyExists(String msg) throws FileAlreadyExistsException {
         log.error(msg);
-        throw new RuntimeException(msg);
+        throw new FileAlreadyExistsException(msg);
     }
 }
