@@ -21,6 +21,7 @@ import sobinda.javadiplomcloud.security.JWTToken;
 import sobinda.javadiplomcloud.util.CloudManager;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -63,6 +64,8 @@ class CloudServiceTest {
                 .key(UUID.randomUUID())
                 .fileName(FILE_NAME)
                 .build();
+
+        when(jwtToken.getAuthenticatedUser()).thenReturn(user);
     }
 
     @AfterEach
@@ -81,7 +84,6 @@ class CloudServiceTest {
                 "testUploadFile".getBytes()
         );
 
-        when(jwtToken.getAuthenticatedUser()).thenReturn(user);
         when(cloudManager.upload(any(), any(), any())).thenReturn(true);
         when(cloudRepository.save(any(CloudFileEntity.class))).thenReturn(cloudFile);
 
@@ -90,7 +92,12 @@ class CloudServiceTest {
     }
 
     @Test
-    void deleteFile() {
+    void deleteFileTest() {
+        when(cloudRepository.findCloudFileEntityByFileName(USER_ID, FILE_NAME)).thenReturn(Optional.of(cloudFile));
+        when(cloudManager.delete(any(CloudFileEntity.class))).thenReturn(true);
+
+        var result = cloudService.deleteFile(FILE_NAME);
+        Assertions.assertTrue(result);
     }
 
     @Test
