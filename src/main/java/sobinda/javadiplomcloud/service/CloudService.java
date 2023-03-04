@@ -40,7 +40,7 @@ public class CloudService {
             var indexPoint = fileName.indexOf(".");
             for (int i = 1; i < Integer.MAX_VALUE; i++) {
                 renameFile = String.format(fileName.substring(0, indexPoint) + " (%d)" + fileName.substring(indexPoint), i);
-                cloudFile = getCloudFileEntity(fileName);
+                cloudFile = getCloudFileEntity(renameFile);
                 if (cloudFile.isEmpty()) {
                     break;
                 }

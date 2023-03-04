@@ -35,8 +35,8 @@ public class SecurityConfig {
                 .authorizeRequests().antMatchers(HttpMethod.POST, "/login", "/user/register").permitAll()
                 .and()
                 //todo поменять обратно, когда получится корректно настроить доступы
-//                .authorizeRequests().anyRequest().authenticated()
-                .authorizeRequests().anyRequest().permitAll()
+                .authorizeRequests().anyRequest().authenticated()
+//                .authorizeRequests().anyRequest().permitAll()
 
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
