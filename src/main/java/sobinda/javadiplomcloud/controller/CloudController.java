@@ -18,13 +18,10 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-//@CrossOrigin("http//localhost:8000")
-//@RequestMapping("/")
 public class CloudController {
-
     private final CloudService cloudService;
 
-    //    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_WRITE')")
     @PostMapping("/file")
     public ResponseEntity<Void> uploadFile(@NotNull @RequestParam("file") MultipartFile multipartFile,
                                            @RequestParam("filename") String fileName) {
@@ -35,7 +32,8 @@ public class CloudController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @DeleteMapping("/file{filename}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_WRITE')")
+    @DeleteMapping("/file")
     public ResponseEntity<Void> deleteFile(@RequestParam String filename) {
         log.info("Начинаем искать файл {} для удаления", filename);
         if (cloudService.deleteFile(filename)) {
@@ -44,7 +42,8 @@ public class CloudController {
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping("/file{filename}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_READ')")
+    @GetMapping("/file")
     public ResponseEntity<byte[]> getFile(@RequestParam String filename) {
         log.info("Запрос на получение скачивания файла {}", filename);
         var cloudFileDto = cloudService.getFile(filename);
@@ -54,13 +53,12 @@ public class CloudController {
                 .body(cloudFileDto.getResource());
     }
 
-    //продумать
-    @PutMapping("/file{filename}")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_WRITE')")
+    @PutMapping("/file")
     public ResponseEntity<Void> putFile(@RequestParam String filename, @RequestBody CloudFileDto cloudFileDto) {
         cloudService.putFile(filename, cloudFileDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_READ')")
     @GetMapping("/list")
