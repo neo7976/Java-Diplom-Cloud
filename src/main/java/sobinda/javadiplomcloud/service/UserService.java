@@ -2,13 +2,20 @@ package sobinda.javadiplomcloud.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 import sobinda.javadiplomcloud.dto.UserDTO;
+import sobinda.javadiplomcloud.entity.UserEntity;
 import sobinda.javadiplomcloud.model.Token;
 import sobinda.javadiplomcloud.repository.UsersRepository;
 import sobinda.javadiplomcloud.security.JWTToken;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +53,17 @@ public class UserService {
             System.out.println(s.length());
             log.info("Исходный пароль: {} и Зашифрованный пароль: {}", s, resultEncode);
         }
+    }
+
+    public String logout(String authToken, HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity userEntity = usersRepository.findUserEntitiesByLogin(auth.getPrincipal().toString()).orElseThrow(()
+                -> new UsernameNotFoundException("Пользователь не найден"));
+        log.info("Пользователь выходит из системы: {}", userEntity.getLogin());
+        SecurityContextLogoutHandler securityContextLogoutHandler = new SecurityContextLogoutHandler();
+        securityContextLogoutHandler.logout(request, response, auth);
+        jwtToken.removeToken(authToken);
+        log.info("Токен {} удален из списка активных токенов для пользователя {} .", authToken, userEntity);
+        return userEntity.getLogin();
     }
 }

@@ -17,4 +17,6 @@ public interface UsersRepository extends JpaRepository<UserEntity, Integer> {
 
     @Query(value = "select o.password from UserEntity o")
     List<String> findAllByLogin();
+
+    Optional<UserEntity> findUserEntitiesByLogin(@NotBlank String login);
 }
