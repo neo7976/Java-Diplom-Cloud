@@ -101,7 +101,7 @@ class CloudServiceTest {
 
     @Test
     void deleteFileTest() {
-        when(cloudRepository.findCloudFileEntityByFileName(USER_ID, FILE_NAME)).thenReturn(Optional.of(cloudFile));
+        when(cloudRepository.findCloudFileEntityByFileName(FILE_NAME)).thenReturn(Optional.of(cloudFile));
         when(cloudManager.delete(any(CloudFileEntity.class))).thenReturn(true);
 
         var result = cloudService.deleteFile(FILE_NAME);
@@ -110,7 +110,7 @@ class CloudServiceTest {
 
     @Test
     void getFileTest() {
-        when(cloudRepository.findCloudFileEntityByFileName(USER_ID, FILE_NAME)).thenReturn(Optional.of(cloudFile));
+        when(cloudRepository.findCloudFileEntityByFileName(FILE_NAME)).thenReturn(Optional.of(cloudFile));
         when(cloudManager.getFile(any(CloudFileEntity.class))).thenReturn(cloudFileDto.getResource());
 
         var result = cloudService.getFile(FILE_NAME);
@@ -120,7 +120,7 @@ class CloudServiceTest {
     @Test
     void putFileTest() {
         String renameFile = "RenameFile.pdf";
-        when(cloudRepository.findCloudFileEntityByFileName(USER_ID, FILE_NAME)).thenReturn(Optional.of(cloudFile));
+        when(cloudRepository.findCloudFileEntityByFileName(FILE_NAME)).thenReturn(Optional.of(cloudFile));
         CloudFileDto cloudFileDtoRename = CloudFileDto.builder()
                 .fileName(renameFile)
                 .build();
