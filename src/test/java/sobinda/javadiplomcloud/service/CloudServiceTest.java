@@ -72,8 +72,6 @@ class CloudServiceTest {
                 .fileName(FILE_NAME)
                 .resource("TESTING".getBytes())
                 .build();
-
-        when(jwtToken.getAuthenticatedUser()).thenReturn(user);
     }
 
     @AfterEach
@@ -92,6 +90,7 @@ class CloudServiceTest {
                 "testUploadFile".getBytes()
         );
 
+        when(jwtToken.getAuthenticatedUser()).thenReturn(user);
         when(cloudManager.upload(any(), any(), any())).thenReturn(true);
         when(cloudRepository.save(any(CloudFileEntity.class))).thenReturn(cloudFile);
 
