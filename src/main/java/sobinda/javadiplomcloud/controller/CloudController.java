@@ -56,14 +56,16 @@ public class CloudController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_WRITE')")
     @PutMapping("/file")
     public ResponseEntity<Void> putFile(@RequestParam String filename, @RequestBody CloudFileDto cloudFileDto) {
-        cloudService.putFile(filename, cloudFileDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (cloudService.putFile(filename, cloudFileDto)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_READ')")
     @GetMapping("/list")
     public ResponseEntity<List<CloudFileDto>> getAllFile() {
         var result = cloudService.getAllFile();
-        return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
