@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+
+  database:
+    container_name: database-server
+    image: mysql:latest
+    volumes:
+      - /mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: diploma_cloud
+    ports:
+      - "3305:3305"
+
+  server:
+    container_name: cloud-app-spring-by-sobin
+    build: ./
+    image: cloud-app-by-sobin:latest
+    environment:
+      spring_datasource_url: jdbc:mysql://database:3305/diploma_cloud
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: mysql
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_LIQUIBASE_URL: jdbc:mysql://database:3305/diploma_cloud
+      SPRING_LIQUIBASE_USER: root
+      SPRING_LIQUIBASE_PASSWORD: mysql
+    ports:
+      - "8085:8085"
+    depends_on:
+      - database
+
+  client:
+    container_name: frontend-client
+    build:
+      context: netology-diplom-frontend
+      dockerfile: Dockerfile
+    image: cloud-storage-front:latest
+    ports:
+      - "8080:8081"
