@@ -9,7 +9,7 @@ services:
     environment:
       MYSQL_USERNAME: root
       MYSQL_PASSWORD: mysql
-#      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: mysql
 #      MYSQL_DATABASE: diplomaCloudDocker
       MYSQL_DATABASE: diploma_cloud
     ports:
