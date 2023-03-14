@@ -11,7 +11,7 @@
 ```mvn clean package -Dmaven.test.skip```;
 
 - После удачной сборки мы получим `Java-Diplom-Cloud-0.0.1-SNAPSHOT.jar` в `.\target`;
-- В терминале выполнить команду по сборке images и containers: ```docker-compose up```;
+- В терминале выполнить команду по сборке images и containers: ```docker-compose up -d --build```;
 - В докере запустятся 3 приложения:
 - backend-server, Java 11 на порту: ```http://localhost:8085```;
 - frontend-client, Node 15 на порту: ```http://localhost:8080``` или ```http://localhost:8081```;
