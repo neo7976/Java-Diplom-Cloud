@@ -122,7 +122,7 @@ public class CloudService {
         if (getCloudFileEntity(cloudFileDto.getFileName()).isPresent()) {
             fileAlreadyExists("Такой файл существует");
         }
-        cloudRepository.findByIdAndRenameFileName(cloudFileDto.getFileName());
+        cloudRepository.findByIdAndRenameFileName(cloudFile.get().getId(), cloudFileDto.getFileName());
 //            if (getCloudFileEntity(cloudFileDto.getFileName()).isEmpty()) {
 //            fileNotFound("Не удалось переименовать файл в БД");
 //        }

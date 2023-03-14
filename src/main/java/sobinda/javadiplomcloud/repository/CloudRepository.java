@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import sobinda.javadiplomcloud.entity.CloudFileEntity;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -28,6 +27,6 @@ public interface CloudRepository extends JpaRepository<CloudFileEntity, Integer>
 //                                   @Param("fileName") String fileName);
 
     @Modifying
-    @Query(value = "update cloud_file c set c.file_name =:fileName", nativeQuery = true)
-    void findByIdAndRenameFileName(@Param("fileName") String fileName);
+    @Query(value = "update cloud_file c set c.file_name =:fileName where c.id=:id", nativeQuery = true)
+    void findByIdAndRenameFileName(@Param("id") Integer id, @Param("fileName") String fileName);
 }
