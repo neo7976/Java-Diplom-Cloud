@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - include:
+      file: migrations/script-v1.0-create-table-cloud-file.yaml
+      relativeToChangeLogFile: true
+  - include:
+      file: migrations/script-v1.0-create-table-user.yaml
+      relativeToChangeLogFile: true
+  - include:
+      file: migrations/script-v1.0-create-table-user-entity-roles.yaml
+      relativeToChangeLogFile: true
+
+  - include:
+      file: migrations/script-v1.0-fill-table-users.sql
+      relativeToChangeLogFile: true
+  - include:
+      file: migrations/script-v1.0-fill-table-user_entity_roles.sql
+      relativeToChangeLogFile: true

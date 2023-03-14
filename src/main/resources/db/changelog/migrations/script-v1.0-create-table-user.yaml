@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-user
+      author: Sobin Dmitrii
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: user_entity_pk
+                    nullable: false
+              - column:
+                  name: login
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false

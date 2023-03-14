@@ -32,10 +32,10 @@ services:
       - MYSQL_DATABASE=diploma_cloud
       - MYSQL_PORT=3306
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-    #    environment:
-    #      SPRING_LIQUIBASE_URL: jdbc:mysql://database:3306/diploma_cloud
-    #      SPRING_LIQUIBASE_USER: root
-    #      SPRING_LIQUIBASE_PASSWORD: mysql
+      #    environment:
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://cloud-db:3306/diploma_cloud
+      - SPRING_LIQUIBASE_USER=cloudPeople
+      - SPRING_LIQUIBASE_PASSWORD=soCloudPass
     ports:
       - "8085:8085"
 
@@ -47,9 +47,9 @@ services:
     image: cloud-storage-front:latest
     networks:
       - cloud-network
-#    environment:
-#      - HOST_NAME=192.168.99.100
-#      - HOST_PORT=8085
+    #    environment:
+    #      - HOST_NAME=192.168.99.100
+    #      - HOST_PORT=8085
     ports:
       - "8080:8080"
 

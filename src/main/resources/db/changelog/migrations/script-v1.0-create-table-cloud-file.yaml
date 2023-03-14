@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-table-cloud-file
+      author: Sobin Dmitrii
+      changes:
+        - createTable:
+            tableName: cloud_entity
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: cloud_entity_pk
+                    nullable: false
+              - column:
+                  name: file_name
+                  type: VARCHAR(128)
+                  constraints:
+                    nullable: false
+#              - column:
+#                  name: file_type
+#                  type: VARCHAR(128)
+#                  constraints:
+#                    nullable: false
+              - column:
+                  name: upload_date
+#                  type: MEDIUMBLOB
+                  type: DATETIME(6)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_key
+                  type: BINARY(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_size
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: file_user_fk
+                    referencedTableName: user_entity
+                    referencedColumnNames: id
